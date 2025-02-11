@@ -1,5 +1,7 @@
 {
-  "body": "{\"message\": \"hello world\"}",
+  "body": {
+    "url": "https://facebook.com"
+  },
   "resource": "/{proxy+}",
   "path": "/path/to/resource",
   "httpMethod": "POST",

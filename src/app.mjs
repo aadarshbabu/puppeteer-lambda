@@ -80,11 +80,10 @@ export const lambdaHandler = async (event, context) => {
   //     };
   //   }
 
-  const url = isValidUrl(event?.url);
-
-  const executablePath = await chromium.executablePath();
-
   try {
+    const url = isValidUrl(event.body?.url);
+
+    const executablePath = await chromium.executablePath();
     // Launch Puppeteer in AWS Lambda
     browser = await puppeteer.launch({
       args: chromium.args,
@@ -95,7 +94,7 @@ export const lambdaHandler = async (event, context) => {
 
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle2" });
-
+    await page.waitForTimeout(2000);
     // Generate PDF
     const pdfBuffer = await page.pdf({ format: "A4" });
 
