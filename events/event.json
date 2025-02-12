@@ -1,6 +1,45 @@
 {
   "body": {
-    "url": "https://facebook.com"
+    "url": "https://facebook.com",
+    "data": {
+      "invoice_number": "INV123456",
+      "invoice_date": "2023-10-25",
+      "bill_to_name": "ABC Pvt. Ltd.",
+      "bill_to_address": "123, Main Street",
+      "bill_to_state": "Maharashtra",
+      "place_of_supply": "Maharashtra",
+      "gstin": "27ABCDE1234F1Z5",
+      "invoiceLineItems": [
+        {
+          "invoice_item_sequence_no": 1,
+          "invoice_item_name": "Product A",
+          "invoice_item_hsn_code": "1234",
+          "invoice_item_unit_prise": 1000,
+          "invoice_item_tax_slab": "18%",
+          "invoice_item_quantity": 2,
+          "invoice_item_total_amount": 2000
+        },
+        {
+          "invoice_item_sequence_no": 2,
+          "invoice_item_name": "Product B",
+          "invoice_item_hsn_code": "5678",
+          "invoice_item_unit_prise": 1500,
+          "invoice_item_tax_slab": "12%",
+          "invoice_item_quantity": 1,
+          "invoice_item_total_amount": 1500
+        }
+      ],
+      "due_amount": 6644847,
+      "discount_amount": 44545,
+      "taxable_amount": 457898,
+      "total_tax_amount": 766745,
+      "total_amount": 6466742,
+      "account_holder_name": "Company Photo",
+      "bank_name": "Example Bank",
+      "branch_address": "456, Bank Street, Mumbai",
+      "account_number": "1234567890",
+      "branch_code": "EXAMPLE1234"
+    }
   },
   "resource": "/{proxy+}",
   "path": "/path/to/resource",
