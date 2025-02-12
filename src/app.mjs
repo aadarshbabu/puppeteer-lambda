@@ -11,32 +11,6 @@
  *
  */
 
-// import chromium from "@sparticuz/chromium";
-// import puppeteer from "puppeteer-core";
-
-// export const lambdaHandler = async (event, context) => {
-//   // Ensure Chromium is using the correct path
-//   const executablePath = await chromium.executablePath();
-
-//   const browser = await puppeteer.launch({
-//     args: chromium.args,
-//     defaultViewport: chromium.defaultViewport,
-//     executablePath: executablePath || "/opt/bin/chromium",
-//     headless: chromium.headless,
-//   });
-
-//   const page = await browser.newPage();
-//   await page.goto("https://google.com");
-//   const screenshot = await page.screenshot({ encoding: "base64" });
-
-//   await browser.close();
-
-//   return {
-//     statusCode: 200,
-//     body: JSON.stringify({ message: "Screenshot taken", screenshot }),
-//   };
-// };
-
 import {
   S3Client,
   PutObjectCommand,
@@ -45,7 +19,6 @@ import {
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 import fs from "fs";
-import path from "path";
 import Handlebars from "handlebars";
 import * as cheerio from "cheerio";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -57,22 +30,22 @@ const UPLOAD_TO_S3 = true; // Set false to save locally
 
 const s3 = new S3Client({ region: REGION });
 
-const VALID_API_KEY = process.env.API_KEY || "your-secure-api-key";
+// const VALID_API_KEY = process.env.API_KEY || "your-secure-api-key";
 
-function isValidUrl(url) {
-  try {
-    if (!url || typeof url !== "string") {
-      throw new Error("Invalid or missing URL.");
-    }
+// function isValidUrl(url) {
+//   try {
+//     if (!url || typeof url !== "string") {
+//       throw new Error("Invalid or missing URL.");
+//     }
 
-    new URL(url); // Validate the URL format
+//     new URL(url); // Validate the URL format
 
-    return url;
-  } catch (error) {
-    console.error("Error navigating to URL:", error.message);
-    throw error; // Re-throw to handle it in the calling function
-  }
-}
+//     return url;
+//   } catch (error) {
+//     console.error("Error navigating to URL:", error.message);
+//     throw error; // Re-throw to handle it in the calling function
+//   }
+// }
 // filesbucketforgetmybill
 
 async function getPresignedUrl(key) {
@@ -179,25 +152,25 @@ export const lambdaHandler = async (event, context) => {
   //   }
 
   // Take a data
-  const templateId = "template_1234";
-
-  const templateKey = `templates/${templateId}/index.html`;
-
-  const command = new GetObjectCommand({
-    Bucket: BUCKET_NAME,
-    Key: templateKey,
-  });
-
-  const res = await s3.send(command);
-  const template = await res.Body.transformToString();
-
-  const compile = Handlebars.compile(template);
-
-  const htmlWithData = compile(event.body.data ?? {});
 
   try {
+    const templateId = event.body?.templateId ?? "template_1234";
+
+    const templateKey = `templates/${templateId}/index.html`;
+
+    const command = new GetObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: templateKey,
+    });
+
+    const res = await s3.send(command);
+    const template = await res.Body.transformToString();
+
+    const compile = Handlebars.compile(template);
+
+    const htmlWithData = compile(event.body.data ?? {});
     const finalHtml = await rewriteHtmlAssets(htmlWithData, templateId);
-    const url = isValidUrl(event.body?.url);
+    // const url = isValidUrl(event.body?.url);
 
     const executablePath = await chromium.executablePath();
     // Launch Puppeteer in AWS Lambda

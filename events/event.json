@@ -1,6 +1,7 @@
 {
   "body": {
     "url": "https://facebook.com",
+    "templateId": "template_99",
     "data": {
       "invoice_number": "INV123456",
       "invoice_date": "2023-10-25",
