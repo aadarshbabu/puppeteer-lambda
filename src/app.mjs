@@ -204,7 +204,7 @@ export const lambdaHandler = async (event, context) => {
 
       await s3.send(new PutObjectCommand(uploadParams));
 
-      pdfURL = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${pdfKey}`;
+      pdfURL = `${pdfKey}`;
     } else {
       // Save PDF locally in /tmp/ (Only writable directory in AWS Lambda)
       const localFilePath = `/tmp/report-${Date.now()}.pdf`;
